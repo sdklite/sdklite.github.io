@@ -1,0 +1,7 @@
+*.log
+*.lock
+*.swp
+
+.DS_Store
+
+/_site
