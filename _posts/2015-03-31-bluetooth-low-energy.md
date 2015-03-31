@@ -11,13 +11,12 @@ Android 4.3 (API Level 18) introduces built-in platform support for Bluetooth Lo
 ### Key Terms and Concepts
 
 Here is a summary of key BLE terms and concepts:
-* Generic Attribute Profile (GATT)—The GATT profile is a general specification for sending and receiving short pieces of data known as "attributes" over a BLE link. All current Low Energy application profiles are based on GATT.
-* The Bluetooth SIG defines many profiles for Low Energy devices. A profile is a specification for how a device works in a particular application. Note that a device can implement more than one profile. For example, a device could contain a heart rate monitor and a battery level detector.
-* Attribute Protocol (ATT)—GATT is built on top of the Attribute Protocol (ATT). This is also referred to as GATT/ATT. ATT is optimized to run on BLE devices. To this end, it uses as few bytes as possible. Each attribute is uniquely identified by a
-* Universally Unique Identifier (UUID), which is a standardized 128-bit format for a string ID used to uniquely identify information. The attributes transported by ATT are formatted as characteristics and services.
-* Characteristic—A characteristic contains a single value and 0-n descriptors that describe the characteristic's value. A characteristic can be thought of as a type, analogous to a class.
-* Descriptor—Descriptors are defined attributes that describe a characteristic value. For example, a descriptor might specify a human- readable description, an acceptable range for a characteristic's value, or a unit of measure that is specific to a characteristic's value.
-* Service—A service is a collection of characteristics. For example, you could have a service called "Heart Rate Monitor" that includes characteristics such as "heart rate measurement." You can find a list of existing GATT-based profiles and services on [bluetooth.org](http://bluetooth.org).
+- Generic Attribute Profile (GATT)—The GATT profile is a general specification for sending and receiving short pieces of data known as "attributes" over a BLE link. All current Low Energy application profiles are based on GATT.
+- The Bluetooth SIG defines many profiles for Low Energy devices. A profile is a specification for how a device works in a particular application. Note that a device can implement more than one profile. For example, a device could contain a heart rate monitor and a battery level detector.
+- Attribute Protocol (ATT)—GATT is built on top of the Attribute Protocol (ATT). This is also referred to as GATT/ATT. ATT is optimized to run on BLE devices. To this end, it uses as few bytes as possible. Each attribute is uniquely identified by a Universally Unique Identifier (UUID), which is a standardized 128-bit format for a string ID used to uniquely identify information. The attributes transported by ATT are formatted as characteristics and services.
+- Characteristic—A characteristic contains a single value and 0-n descriptors that describe the characteristic's value. A characteristic can be thought of as a type, analogous to a class.
+- Descriptor—Descriptors are defined attributes that describe a characteristic value. For example, a descriptor might specify a human- readable description, an acceptable range for a characteristic's value, or a unit of measure that is specific to a characteristic's value.
+- Service—A service is a collection of characteristics. For example, you could have a service called "Heart Rate Monitor" that includes characteristics such as "heart rate measurement." You can find a list of existing GATT-based profiles and services on [bluetooth.org](http://bluetooth.org).
 
 #### Roles and Responsibilities
 
@@ -38,10 +37,10 @@ In order to use Bluetooth features in your application, you must declare the Blu
 If you want your app to initiate device discovery or manipulate Bluetooth settings, you must also declare the [BLUETOOTH_ADMIN](http://developer.android.com/reference/android/Manifest.permission.html#BLUETOOTH_ADMIN) permission. Note: If you use the [BLUETOOTH_ADMIN](http://developer.android.com/reference/android/Manifest.permission.html#BLUETOOTH_ADMIN) permission, then you must also have the [BLUETOOTH](http://developer.android.com/reference/android/Manifest.permission.html#BLUETOOTH) permission.
 Declare the Bluetooth permission(s) in your application manifest file. For example:
 
-{% highlight java linenos %}
+```
 <uses-permission android:name="android.permission.BLUETOOTH" />
 <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-{% endhighlight %}
+```
 
 If you want to declare that your app is available to BLE-capable devices only, include the following in your app's manifest:
 
