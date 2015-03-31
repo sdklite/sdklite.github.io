@@ -1,3 +1,7 @@
+---
+layout: post
+---
+
 # Bluetooth Low Energy
 
 ## Android BLE
