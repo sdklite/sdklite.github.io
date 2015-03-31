@@ -38,10 +38,10 @@ In order to use Bluetooth features in your application, you must declare the Blu
 If you want your app to initiate device discovery or manipulate Bluetooth settings, you must also declare the [BLUETOOTH_ADMIN](http://developer.android.com/reference/android/Manifest.permission.html#BLUETOOTH_ADMIN) permission. Note: If you use the [BLUETOOTH_ADMIN](http://developer.android.com/reference/android/Manifest.permission.html#BLUETOOTH_ADMIN) permission, then you must also have the [BLUETOOTH](http://developer.android.com/reference/android/Manifest.permission.html#BLUETOOTH) permission.
 Declare the Bluetooth permission(s) in your application manifest file. For example:
 
-```
+{% highlight java linenos %}
 <uses-permission android:name="android.permission.BLUETOOTH" />
 <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-```
+{% endhighlight %}
 
 If you want to declare that your app is available to BLE-capable devices only, include the following in your app's manifest:
 
