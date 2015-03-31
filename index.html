@@ -3,5 +3,7 @@ layout: master
 title: Home
 ---
 <ul>
-    <li><a href='{{site.posts.first.url}}'>{{site.posts.first.title}}</a></li>
+    {% for post in site.posts %}
+    <li><a alt="{{post.title}}" href='{{post.url}}'>{{post.title}}</a> - {{post.date | date_to_string}}</li>
+    {% endfor %}
 </ul>
