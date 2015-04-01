@@ -1,5 +1,6 @@
 ---
 layout: post
+category: bluetooth
 ---
 
 # Bluetooth Low Energy
@@ -37,20 +38,20 @@ In order to use Bluetooth features in your application, you must declare the Blu
 If you want your app to initiate device discovery or manipulate Bluetooth settings, you must also declare the [BLUETOOTH_ADMIN](http://developer.android.com/reference/android/Manifest.permission.html#BLUETOOTH_ADMIN) permission. Note: If you use the [BLUETOOTH_ADMIN](http://developer.android.com/reference/android/Manifest.permission.html#BLUETOOTH_ADMIN) permission, then you must also have the [BLUETOOTH](http://developer.android.com/reference/android/Manifest.permission.html#BLUETOOTH) permission.
 Declare the Bluetooth permission(s) in your application manifest file. For example:
 
-```
+```xml
 <uses-permission android:name="android.permission.BLUETOOTH" />
 <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 ```
 
 If you want to declare that your app is available to BLE-capable devices only, include the following in your app's manifest:
 
-```
+```xml
 <uses-feature android:name="android.hardware.bluetooth_le" android:required="true" />
 ```
 
 However, if you want to make your app available to devices that don't support BLE, you should still include this element in your app's manifest, but set required="false". Then at run-time you can determine BLE availability by using [PackageManager.hasSystemFeature()](http://developer.android.com/reference/android/content/pm/PackageManager.html#hasSystemFeature(java.lang.String)):
 
-```
+```java
 // Use this check to determine whether BLE is supported on the device. Then
 // you can selectively disable BLE-related features.
 if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
@@ -67,7 +68,7 @@ If BLE is not supported, then you should gracefully disable any BLE features. If
 
 1. Get the [BluetoothAdapter](http://developer.android.com/reference/android/bluetooth/BluetoothAdapter.html)
 The [BluetoothAdapter](http://developer.android.com/reference/android/bluetooth/BluetoothAdapter.html) is required for any and all Bluetooth activity. The [BluetoothAdapter](http://developer.android.com/reference/android/bluetooth/BluetoothAdapter.html) represents the device's own Bluetooth adapter (the Bluetooth radio). There's one Bluetooth adapter for the entire system, and your application can interact with it using this object. The snippet below shows how to get the adapter. Note that this approach uses [getSystemService()](http://developer.android.com/reference/android/content/Context.html#getSystemService(java.lang.String)) to return an instance of [BluetoothManager](http://developer.android.com/reference/android/bluetooth/BluetoothManager.html), which is then used to get the adapter. Android 4.3 (API Level 18) introduces [BluetoothManager](http://developer.android.com/reference/android/bluetooth/BluetoothManager.html):
-```
+```java
 // Initializes Bluetooth adapter.
 final BluetoothManager bluetoothManager =
         (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
@@ -75,7 +76,7 @@ mBluetoothAdapter = bluetoothManager.getAdapter();
 ```
 2. EnableBluetooth
 Next, you need to ensure that Bluetooth is enabled. Call [isEnabled()](http://developer.android.com/reference/android/bluetooth/BluetoothAdapter.html#isEnabled()) to check whether Bluetooth is currently enabled. If this method returns false, then Bluetooth is disabled. The following snippet checks whether Bluetooth is enabled. If it isn't, the snippet displays an error prompting the user to go to Settings to enable Bluetooth:
-```
+```java
 private BluetoothAdapter mBluetoothAdapter;
 ...
 // Ensures Bluetooth is available on the device and it is enabled. If not,
@@ -95,7 +96,7 @@ To find BLE devices, you use the [startLeScan()](http://developer.android.com/re
 
 The following snippet shows how to start and stop a scan:
 
-```
+```java
 /**
  * Activity for scanning and displaying available BLE devices.
  */
@@ -135,7 +136,7 @@ If you want to scan for only specific types of peripherals, you can instead call
 
 Here is an implementation of the [BluetoothAdapter.LeScanCallback](http://developer.android.com/reference/android/bluetooth/BluetoothAdapter.LeScanCallback.html), which is the interface used to deliver BLE scan results:
 
-```
+```java
 private LeDeviceListAdapter mLeDeviceListAdapter;
 ...
 // Device scan callback.
@@ -161,7 +162,7 @@ private BluetoothAdapter.LeScanCallback mLeScanCallback =
 
 The first step in interacting with a BLE device is connecting to it — more specifically, connecting to the GATT server on the device. To connect to a GATT server on a BLE device, you use the [connectGatt()](http://developer.android.com/reference/android/bluetooth/BluetoothDevice.html#connectGatt(android.content.Context, boolean, android.bluetooth.BluetoothGattCallback))method. This method takes three parameters: a [Context](http://developer.android.com/reference/android/content/Context.html) object, autoConnect(boolean indicating whether to automatically connect to the BLE device as soon as it becomes available), and a reference to a [BluetoothGattCallback](http://developer.android.com/reference/android/bluetooth/BluetoothGattCallback.html):
 
-```
+```java
 mBluetoothGatt = device.connectGatt(this, false, mGattCallback);
 ```
 
@@ -169,7 +170,7 @@ This connects to the GATT server hosted by the BLE device, and returns a [Blueto
 
 In this example, the BLE app provides an activity (DeviceControlActivity) to connect, display data, and display GATT services and characteristics supported by the device. Based on user input, this activity communicates with a [Service](http://developer.android.com/reference/android/app/Service.html) called BluetoothLeService, which interacts with the BLE device via the Android BLE API:
 
-```
+```java
 // A service that interacts with the BLE device via the Android BLE API.
 public class BluetoothLeService extends Service {
     private final static String TAG = BluetoothLeService.class.getSimpleName();
@@ -249,7 +250,7 @@ public class BluetoothLeService extends Service {
 When a particular callback is triggered, it calls the appropriate broadcastUpdate() helper method and passes it an action. Note that the data parsing in this section is performed in accordance with the Bluetooth Heart Rate Measurement [profile specifications](http://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx?u=org.bluetooth.characteristic.heart_rate_measurement.xml):
 
 
-```
+```java
 private void broadcastUpdate(final String action) {
     final Intent intent = new Intent(action);
     sendBroadcast(intent);
@@ -291,7 +292,7 @@ private void broadcastUpdate(final String action,
 
 Back in DeviceControlActivity, these events are handled by a [BroadcastReceiver](http://developer.android.com/reference/android/content/BroadcastReceiver.html):
 
-```
+```java
 // Handles various events fired by the Service.
 // ACTION_GATT_CONNECTED: connected to a GATT server.
 // ACTION_GATT_DISCONNECTED: disconnected from a GATT server.
@@ -327,7 +328,7 @@ private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
 
 Once your Android app has connected to a GATT server and discovered services, it can read and write attributes, where supported. For example, this snippet iterates through the server's services and characteristics and displays them in the UI:
 
-```
+```java
 public class DeviceControlActivity extends Activity {
     ...
     // Demonstrates how to iterate through the supported GATT
@@ -391,7 +392,7 @@ public class DeviceControlActivity extends Activity {
 
 It's common for BLE apps to ask to be notified when a particular characteristic changes on the device. This snippet shows how to set a notification for a characteristic, using the [setCharacteristicNotification()](http://developer.android.com/reference/android/bluetooth/BluetoothGatt.html#setCharacteristicNotification(android.bluetooth.BluetoothGattCharacteristic, boolean)) method:
 
-```
+```java
 private BluetoothGatt mBluetoothGatt;
 BluetoothGattCharacteristic characteristic;
 boolean enabled;
@@ -406,7 +407,7 @@ mBluetoothGatt.writeDescriptor(descriptor);
 
 Once notifications are enabled for a characteristic, an [onCharacteristicChanged()](http://developer.android.com/reference/android/bluetooth/BluetoothGattCallback.html#onCharacteristicChanged(android.bluetooth.BluetoothGatt, android.bluetooth.BluetoothGattCharacteristic)) callback is triggered if the characteristic changes on the remote device:
 
-```
+```java
 @Override
 // Characteristic notification
 public void onCharacteristicChanged(BluetoothGatt gatt,
@@ -419,7 +420,7 @@ public void onCharacteristicChanged(BluetoothGatt gatt,
 
 Once your app has finished using a BLE device, it should call [close()](http://developer.android.com/reference/android/bluetooth/BluetoothGatt.html#close()) so the system can release resources appropriately:
 
-```
+```java
 public void close() {
     if (mBluetoothGatt == null) {
         return;
