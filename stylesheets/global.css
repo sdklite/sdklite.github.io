@@ -112,3 +112,26 @@ h6 {
     font-size   : 1em;
     color       : #777;
 }
+
+.center {
+    display : block;
+    margin  : 0 auto;
+}
+
+.left {
+    float : left;
+}
+
+.right {
+    float : right;
+}
+
+.clear {
+    clear : both;
+}
+
+.half {
+    -moz-transform    : scale(0.5);
+    -webkit-transform : scale(0.5);
+    transform         : scale(0.5);
+}
