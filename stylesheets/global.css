@@ -1,0 +1,114 @@
+html {
+    font-family            : "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
+    font-size              : 12px;
+    line-height            : 1.45;
+    -webkit-font-smoothing : antialiased;
+}
+
+body,
+ol,
+ul,
+li,
+dl,
+dt,
+dd,
+p,
+form,
+blockquote {
+    margin  : 0px;
+    padding : 0px;
+}
+
+ol,
+ul,
+dl {
+    padding-left : 2em;
+}
+
+article {
+    font-size : 14px;
+    padding   : 30px;
+}
+
+a {
+    color           : #4183c4;
+    text-decoration : none;
+}
+
+a:hover {
+    text-decoration : underline;
+}
+
+p {
+    margin : 10px 0px;
+}
+
+code {
+    margin        : 16px 0px;
+    padding       : 16px;
+    overflow      : auto;
+    line-height   : 1.45;
+    background    : #f7f7f7;
+    border-radius : 3px;
+    display       : block;
+    word-break    : normal;
+    white-space   : pre;
+}
+
+pre {
+    padding    : 16px;
+    overflow   : auto;
+    background : #f7f7f7;
+}
+
+pre > code {
+    padding    : 0px!important;
+    margin     : 0px!important;
+    background : transparent!important;
+}
+
+blockquote {
+    color       : #777;
+    padding     : 0 15px;
+    border-left : 4px solid #ddd; 
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight : bold;
+    margin      : 8px 0;
+}
+
+h1 {
+    font-size   : 2.25em;
+    padding     : 0.15em 0;
+    line-height : 1.2;
+}
+
+h2 {
+    font-size   : 1.75em;
+    padding     : 0.15em 0;
+    line-height : 1.225;
+}
+
+h3 {
+    font-size   : 1.5em;
+    line-height : 1.43;
+}
+
+h4 {
+    font-size   : 1.25em;
+}
+
+h5 {
+    font-size   : 1em;
+}
+
+h6 {
+    font-size   : 1em;
+    color       : #777;
+}

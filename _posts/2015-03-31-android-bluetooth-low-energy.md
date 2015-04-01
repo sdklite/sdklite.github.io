@@ -4,13 +4,12 @@ layout: post
 
 # Bluetooth Low Energy
 
-## Android BLE
-
 Android 4.3 (API Level 18) introduces built-in platform support for Bluetooth Low Energy in the central role and provides APIs that apps can use to discover devices, query for services, and read/write characteristics. In contrast to [Classic Bluetooth](http://developer.android.com/guide/topics/connectivity/bluetooth.html), Bluetooth Low Energy (BLE) is designed to provide significantly lower power consumption. This allows Android apps to communicate with BLE devices that have low power requirements, such as proximity sensors, heart rate monitors, fitness devices, and so on.
 
-### Key Terms and Concepts
+## Key Terms and Concepts
 
 Here is a summary of key BLE terms and concepts:
+
 - Generic Attribute Profile (GATT)—The GATT profile is a general specification for sending and receiving short pieces of data known as "attributes" over a BLE link. All current Low Energy application profiles are based on GATT.
 - The Bluetooth SIG defines many profiles for Low Energy devices. A profile is a specification for how a device works in a particular application. Note that a device can implement more than one profile. For example, a device could contain a heart rate monitor and a battery level detector.
 - Attribute Protocol (ATT)—GATT is built on top of the Attribute Protocol (ATT). This is also referred to as GATT/ATT. ATT is optimized to run on BLE devices. To this end, it uses as few bytes as possible. Each attribute is uniquely identified by a Universally Unique Identifier (UUID), which is a standardized 128-bit format for a string ID used to uniquely identify information. The attributes transported by ATT are formatted as characteristics and services.
@@ -18,9 +17,10 @@ Here is a summary of key BLE terms and concepts:
 - Descriptor—Descriptors are defined attributes that describe a characteristic value. For example, a descriptor might specify a human- readable description, an acceptable range for a characteristic's value, or a unit of measure that is specific to a characteristic's value.
 - Service—A service is a collection of characteristics. For example, you could have a service called "Heart Rate Monitor" that includes characteristics such as "heart rate measurement." You can find a list of existing GATT-based profiles and services on [bluetooth.org](http://bluetooth.org).
 
-#### Roles and Responsibilities
+### Roles and Responsibilities
 
 Here are the roles and responsibilities that apply when an Android device interacts with a BLE device:
+
 - Central vs. peripheral. This applies to the BLE connection itself. The device in the central role scans, looking for advertisement, and the device in the peripheral role makes the advertisement.
 - GATT server vs. GATT client. This determines how two devices talk to each other once they've established the connection.
 
@@ -30,7 +30,7 @@ Once the phone and the activity tracker have established a connection, they star
 
 In the example used in this document, the Android app (running on an Android device) is the GATT client. The app gets data from the GATT server, which is a BLE heart rate monitor that supports the [Heart Rate Profile](http://developer.bluetooth.org/TechnologyOverview/Pages/HRP.aspx). But you could alternatively design your Android app to play the GATT server role. See [BluetoothGattServer](http://developer.android.com/reference/android/bluetooth/BluetoothGattServer.html) for more information.
 
-### BLE Permissions
+## BLE Permissions
 
 In order to use Bluetooth features in your application, you must declare the Bluetooth permission [BLUETOOTH](http://developer.android.com/reference/android/Manifest.permission.html#BLUETOOTH). You need this permission to perform any Bluetooth communication, such as requesting a connection, accepting a connection, and transferring data.
 
@@ -59,7 +59,7 @@ if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) 
 }
 ```
 
-### Setting UP BLE
+## Setting UP BLE
 
 Before your application can communicate over BLE, you need to verify that BLE is supported on the device, and if so, ensure that it is enabled. Note that this check is only necessary if <uses-feature.../>is set to false.
 
@@ -67,17 +67,14 @@ If BLE is not supported, then you should gracefully disable any BLE features. If
 
 1. Get the [BluetoothAdapter](http://developer.android.com/reference/android/bluetooth/BluetoothAdapter.html)
 The [BluetoothAdapter](http://developer.android.com/reference/android/bluetooth/BluetoothAdapter.html) is required for any and all Bluetooth activity. The [BluetoothAdapter](http://developer.android.com/reference/android/bluetooth/BluetoothAdapter.html) represents the device's own Bluetooth adapter (the Bluetooth radio). There's one Bluetooth adapter for the entire system, and your application can interact with it using this object. The snippet below shows how to get the adapter. Note that this approach uses [getSystemService()](http://developer.android.com/reference/android/content/Context.html#getSystemService(java.lang.String)) to return an instance of [BluetoothManager](http://developer.android.com/reference/android/bluetooth/BluetoothManager.html), which is then used to get the adapter. Android 4.3 (API Level 18) introduces [BluetoothManager](http://developer.android.com/reference/android/bluetooth/BluetoothManager.html):
-
 ```
 // Initializes Bluetooth adapter.
 final BluetoothManager bluetoothManager =
         (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
 mBluetoothAdapter = bluetoothManager.getAdapter();
 ```
-
 2. EnableBluetooth
 Next, you need to ensure that Bluetooth is enabled. Call [isEnabled()](http://developer.android.com/reference/android/bluetooth/BluetoothAdapter.html#isEnabled()) to check whether Bluetooth is currently enabled. If this method returns false, then Bluetooth is disabled. The following snippet checks whether Bluetooth is enabled. If it isn't, the snippet displays an error prompting the user to go to Settings to enable Bluetooth:
-
 ```
 private BluetoothAdapter mBluetoothAdapter;
 ...
@@ -89,9 +86,10 @@ if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
 }
 ```
 
-### Finding BLE Devices
+## Finding BLE Devices
 
 To find BLE devices, you use the [startLeScan()](http://developer.android.com/reference/android/bluetooth/BluetoothAdapter.html#startLeScan(android.bluetooth.BluetoothAdapter.LeSca nCallback)) method. This method takes a [BluetoothAdapter.LeScanCallback](http://developer.android.com/reference/android/bluetooth/BluetoothAdapter.LeScanCallback.html) as a parameter. You must implement this callback, because that is how scan results are returned. Because scanning is battery-intensive, you should observe the following guidelines:
+
 - As soon as you find the desired device, stop scanning.
 - Never scan on a loop, and set a time limit on your scan. A device that was previously available may have moved out of range, and continuing to scan drains the battery.
 
@@ -159,7 +157,7 @@ private BluetoothAdapter.LeScanCallback mLeScanCallback =
 
 > **Note:** You can only scan for Bluetooth LE devices or scan for Classic Bluetooth devices, as described in [Bluetooth](http://developer.android.com/guide/topics/connectivity/bluetooth.html). You cannot scan for both Bluetooth LE and classic devices at the same time.
 
-### Connecting to a GATT Server
+## Connecting to a GATT Server
 
 The first step in interacting with a BLE device is connecting to it — more specifically, connecting to the GATT server on the device. To connect to a GATT server on a BLE device, you use the [connectGatt()](http://developer.android.com/reference/android/bluetooth/BluetoothDevice.html#connectGatt(android.content.Context, boolean, android.bluetooth.BluetoothGattCallback))method. This method takes three parameters: a [Context](http://developer.android.com/reference/android/content/Context.html) object, autoConnect(boolean indicating whether to automatically connect to the BLE device as soon as it becomes available), and a reference to a [BluetoothGattCallback](http://developer.android.com/reference/android/bluetooth/BluetoothGattCallback.html):
 
@@ -325,7 +323,7 @@ private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
 };
 ```
 
-### Reading BLE Attributes
+## Reading BLE Attributes
 
 Once your Android app has connected to a GATT server and discovered services, it can read and write attributes, where supported. For example, this snippet iterates through the server's services and characteristics and displays them in the UI:
 
@@ -389,7 +387,7 @@ public class DeviceControlActivity extends Activity {
 }
 ```
 
-### Receiving GATT Notifications
+## Receiving GATT Notifications
 
 It's common for BLE apps to ask to be notified when a particular characteristic changes on the device. This snippet shows how to set a notification for a characteristic, using the [setCharacteristicNotification()](http://developer.android.com/reference/android/bluetooth/BluetoothGatt.html#setCharacteristicNotification(android.bluetooth.BluetoothGattCharacteristic, boolean)) method:
 
@@ -417,7 +415,7 @@ public void onCharacteristicChanged(BluetoothGatt gatt,
 }
 ```
 
-### Closing the Client App
+## Closing the Client App
 
 Once your app has finished using a BLE device, it should call [close()](http://developer.android.com/reference/android/bluetooth/BluetoothGatt.html#close()) so the system can release resources appropriately:
 
@@ -430,5 +428,3 @@ public void close() {
     mBluetoothGatt = null;
 }
 ```
-
-## Core Bluetooth Framework
